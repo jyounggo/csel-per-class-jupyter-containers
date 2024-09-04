@@ -25,10 +25,16 @@ RUN python3 -m pip install \
 	sqlalchemy==2.0.16 \
 	ipywidgets==8.0.7 \
 	folium==0.14.0 \
-        numba==0.57.1
+        numba==0.57.1 \
+        jupytext==1.15.0 \
+        widgetsnbextension==4.0.8 \
+        jupyterlab-widgets==3.0.8
 
 # Install R packages for otter-grader
 #RUN R -e "devtools::install_github('ucbds-infra/ottr@stable')"
+
+# Install misc
+RUN pip install  simple-latex-checker
 
 RUN     rm -rf /home/jovyan  && \
         mkdir /home/jovyan && \
