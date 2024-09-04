@@ -1,0 +1,24 @@
+# Dockerfile for INFO 4614 Information and Data Retrieval Systems
+ARG BASE_CONTAINER=define_as_build_arg
+FROM $BASE_CONTAINER
+LABEL MAINTAINER="CSEL Ops <admin@cs.colorado.edu>"
+
+USER    root
+
+ENV     DEBIAN_FRONTEND noninteractive
+
+# JDK, maven, ant
+RUN  apt-get update && apt-get install --no-install-recommends -y openjdk-17-jdk-headless maven ant ca-certificates-java  && \
+    update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java  && \
+    apt-get clean
+# Copy course support material
+ADD LIAsourcecode.zip /opt
+RUN cd /opt && unzip LIAsourcecode.zip && rm /opt/LIAsourcecode.zip
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+RUN     rm -rf /home/jovyan  && \
+        mkdir /home/jovyan && \
+        chown $NB_UID:$NB_GID /home/jovyan
+
+USER    $NB_UID

@@ -29,6 +29,7 @@ export DC_VERSION_NUMBER=v6.5.2.2.1
 export CC_VERSION_NUMBER=v6.5.2.2.1
 export QT_VERSION_NUMBER=v6.5.2.2.2
 export DB_VERSION_NUMBER=v6.5.2.2.1
+export INFOSYS_VERSION_NUMBER=v6.5.2.2
 
 export NOTEBOOK_PL_IMAGE = $(DOCKER_REPO)/notebook-pl$(DEV_LABEL)
 export NOTEBOOK_PL_VERSION = $(NOTEBOOK_PL_IMAGE):$(NOTEBOOK_COMMON_BASE_PL)
@@ -101,7 +102,11 @@ export NOTEBOOK_SWD_IMAGE = $(DOCKER_REPO)/notebook-swd$(DEV_LABEL)
 export NOTEBOOK_SWD_VERSION = $(NOTEBOOK_SWD_IMAGE):$(BASE_VERSION_NUMBER)
 export NOTEBOOK_SWD_LATEST = $(NOTEBOOK_SWD_IMAGE):latest
 
-build: build-notebook build-pl build-db build-mpi build-ai build-chaos build-dc build-pac build-qt build-qcs build-introc build-corg build-ns build-cc build-appliedml build-dsa build-swd
+export NOTEBOOK_INFOSYS_IMAGE = $(DOCKER_REPO)/notebook-infosys$(DEV_LABEL)
+export NOTEBOOK_INFOSYS_VERSION = $(NOTEBOOK_INFOSYS_IMAGE):$(INFOSYS_VERSION_NUMBER)
+export NOTEBOOK_INFOSYS_LATEST = $(NOTEBOOK_INFOSYS_IMAGE):latest
+
+build: build-notebook build-pl build-db build-mpi build-ai build-chaos build-dc build-pac build-qt build-qcs build-introc build-corg build-ns build-cc build-appliedml build-dsa build-swd build-infosys
 
 DOCKER_ARGS=--build-arg DEV_LABEL=$(DEV_LABEL)
 
@@ -215,6 +220,12 @@ build-swd:
 	docker tag $(NOTEBOOK_SWD_IMAGE) $(NOTEBOOK_SWD_VERSION)
 	docker tag $(NOTEBOOK_SWD_IMAGE) $(NOTEBOOK_SWD_LATEST)
 
+build-infosys:
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+        	$(DOCKER_ARGS) -t $(NOTEBOOK_INFOSYS_VERSION) -t $(NOTEBOOK_INFOSYS_LATEST) -f Dockerfile-infosys .
+	docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_VERSION)
+	docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_LATEST)
+
 tag:
 	-docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_VERSION)
 	-docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_LATEST)
@@ -252,8 +263,10 @@ tag:
 	-docker tag $(NOTEBOOK_DSA_IMAGE) $(NOTEBOOK_DSA_LATEST)
 	-docker tag $(NOTEBOOK_SWD_IMAGE) $(NOTEBOOK_SWD_VERSION)
 	-docker tag $(NOTEBOOK_SWD_IMAGE) $(NOTEBOOK_SWD_LATEST)
+	-docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_VERSION)
+	-docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_LATEST)
 
-push: push-notebook push-pl push-db push-mpi push-ai push-chaos push-dc push-pac push-qt push-qcs push-introc push-corg push-ns push-cc push-webots push-appliedml push-dsa push-swd
+push: push-notebook push-pl push-db push-mpi push-ai push-chaos push-dc push-pac push-qt push-qcs push-introc push-corg push-ns push-cc push-webots push-appliedml push-dsa push-swd push-infosys
 
 push-notebook: build-notebook
 	-docker push $(NOTEBOOK_VERSION)
@@ -326,3 +339,7 @@ push-dsa: build-dsa
 push-swd: build-swd
 	-docker push $(NOTEBOOK_SWD_VERSION)
 	-docker push $(NOTEBOOK_SWD_LATEST)
+
+push-infosys: build-infosys
+	-docker push $(NOTEBOOK_INFOSYS_VERSION)
+	-docker push $(NOTEBOOK_INFOSYS_LATEST)
