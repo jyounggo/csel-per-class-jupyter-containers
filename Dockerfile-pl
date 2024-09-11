@@ -57,6 +57,16 @@ RUN 	./pl-install-kernels.sh && \
 	rm -rf .ivy2 && \	
 	jupyter kernelspec list	
 
+# Install deno
+ENV DENO_INSTALL=/usr
+RUN curl -fsSL https://deno.land/install.sh | sh &&  \
+	deno jupyter --install
+
+# FIX: Move the kernel specification files of deno to /opt/conda
+RUN  cp $HOME/.local/share/jupyter/*.png  $HOME/.local/share/jupyter/kernels/deno && \
+	cp $HOME/.local/share/jupyter/*.svg  $HOME/.local/share/jupyter/kernels/deno && \
+	cp -R $HOME/.local/share/jupyter/kernels/deno $CONDA_DIR/share/jupyter/kernels/
+
 RUN     ls -lR /home/jovyan && \
 	rm -rf /home/jovyan  && \
         mkdir /home/jovyan && \
