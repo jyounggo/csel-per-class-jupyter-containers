@@ -107,7 +107,11 @@ export NOTEBOOK_INFOSYS_IMAGE = $(DOCKER_REPO)/notebook-infosys$(DEV_LABEL)
 export NOTEBOOK_INFOSYS_VERSION = $(NOTEBOOK_INFOSYS_IMAGE):$(INFOSYS_VERSION_NUMBER)
 export NOTEBOOK_INFOSYS_LATEST = $(NOTEBOOK_INFOSYS_IMAGE):latest
 
-build: build-notebook build-pl build-db build-mpi build-ai build-chaos build-dc build-pac build-qt build-qcs build-introc build-corg build-ns build-cc build-appliedml build-dsa build-swd build-infosys
+export NOTEBOOK_CPP_IMAGE = $(DOCKER_REPO)/notebook-cpp$(DEV_LABEL)
+export NOTEBOOK_CPP_VERSION = $(NOTEBOOK_CPP_IMAGE):$(BASE_VERSION_NUMBER)
+export NOTEBOOK_CPP_LATEST = $(NOTEBOOK_CPP_IMAGE):latest
+
+build: build-notebook build-pl build-db build-mpi build-ai build-chaos build-dc build-pac build-qt build-qcs build-introc build-corg build-ns build-cc build-appliedml build-dsa build-swd build-infosys build-cpp
 
 DOCKER_ARGS=--build-arg DEV_LABEL=$(DEV_LABEL)
 
@@ -227,6 +231,12 @@ build-infosys:
 	docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_VERSION)
 	docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_LATEST)
 
+build-cpp:
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+        	$(DOCKER_ARGS) -t $(NOTEBOOK_CPP_VERSION) -t $(NOTEBOOK_CPP_LATEST) -f Dockerfile-cpp .
+	docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_VERSION)
+	docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_LATEST)
+
 tag:
 	-docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_VERSION)
 	-docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_LATEST)
@@ -266,8 +276,10 @@ tag:
 	-docker tag $(NOTEBOOK_SWD_IMAGE) $(NOTEBOOK_SWD_LATEST)
 	-docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_VERSION)
 	-docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_LATEST)
+	-docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_VERSION)
+	-docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_LATEST)
 
-push: push-notebook push-pl push-db push-mpi push-ai push-chaos push-dc push-pac push-qt push-qcs push-introc push-corg push-ns push-cc push-webots push-appliedml push-dsa push-swd push-infosys
+push: push-notebook push-pl push-db push-mpi push-ai push-chaos push-dc push-pac push-qt push-qcs push-introc push-corg push-ns push-cc push-webots push-appliedml push-dsa push-swd push-infosys push-cpp
 
 push-notebook: build-notebook
 	-docker push $(NOTEBOOK_VERSION)
@@ -344,3 +356,7 @@ push-swd: build-swd
 push-infosys: build-infosys
 	-docker push $(NOTEBOOK_INFOSYS_VERSION)
 	-docker push $(NOTEBOOK_INFOSYS_LATEST)
+
+push-cpp: build-cpp
+	-docker push $(NOTEBOOK_CPP_VERSION)
+	-docker push $(NOTEBOOK_CPP_LATEST)
