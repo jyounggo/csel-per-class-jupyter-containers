@@ -67,6 +67,11 @@ RUN  cp $HOME/.local/share/jupyter/*.png  $HOME/.local/share/jupyter/kernels/den
 	cp $HOME/.local/share/jupyter/*.svg  $HOME/.local/share/jupyter/kernels/deno && \
 	cp -R $HOME/.local/share/jupyter/kernels/deno $CONDA_DIR/share/jupyter/kernels/
 
+# Install : github cli
+ADD https://github.com/cli/cli/releases/download/v2.57.0/gh_2.57.0_linux_amd64.tar.gz /tmp
+RUN cd /tmp && tar zxvf gh_2.57.0_linux_amd64.tar.gz && cp gh_2.57.0_linux_amd64/bin/* /usr/local/bin/ && \
+	rm -rf gh_2.57.0_linux_amd64*
+
 RUN     ls -lR /home/jovyan && \
 	rm -rf /home/jovyan  && \
         mkdir /home/jovyan && \
