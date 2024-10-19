@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 #Dockerfile for CSCI3022 , DataScience Algorithm
 # Install otter-grader
 RUN python3 -m pip install \ 
-      otter-grader==5.1.3 pdfkit PyPDF2 plotly \
+      otter-grader==5.7.0 pdfkit PyPDF2 plotly \
 	jupysql==0.8.0 \
 	matplotlib==3.7.1 \
 	mdit-py-plugins==0.4.0 \
