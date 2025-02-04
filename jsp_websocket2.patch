@@ -1,0 +1,29 @@
+diff --git a/jupyter_server_proxy/websocket.py b/jupyter_server_proxy/websocket.py
+index a43b779..9706279 100644
+--- a/jupyter_server_proxy/websocket.py
++++ b/jupyter_server_proxy/websocket.py
+@@ -5,6 +5,7 @@ Some original inspiration from https://github.com/senko/tornado-proxy
+ """
+ 
+ import inspect
++import os
+ 
+ from jupyter_server.utils import ensure_async
+ from tornado import httpclient, httputil, websocket
+@@ -40,6 +41,16 @@ def pingable_ws_connect(
+     request.headers = httputil.HTTPHeaders(request.headers)
+     request = httpclient._RequestProxy(request, httpclient.HTTPRequest._DEFAULTS)
+ 
++    # Increase the default websocket max message size:
++    default_max_ws_size = getattr(websocket, '_default_max_message_size')
++    max_message_size = 100 * 1024 * 1024 # default 100MB
++    env_var = os.getenv("JUPYTER_SERVER_PROXY_WS_MAXSIZE") # The value can be updated through JUPYTER_SERVER_PROXY_WS_MAXSIZE
++    if env_var:
++        max_message_size = int(env_var)
++
++    if default_max_ws_size != max_message_size:
++        setattr(websocket, '_default_max_message_size', max_message_size);
++
+     # resolver= parameter requires tornado >= 6.3. Only pass it if needed
+     # (for Unix socket support), so older versions of tornado can still
+     # work otherwise.

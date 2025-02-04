@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-WANT="1.5.1"
+WANT="1.22.11"
 cd /tmp
 code-server --list-extensions --show-versions | grep "ms-vscode.cpptools@$WANT"
 if [ $? -eq 0 ]; then
@@ -12,7 +12,7 @@ if [ $? -eq 0 ]; then
 fi
 echo "Install cpptools $WANT"
 ( code-server --uninstall-extension ms-vscode.cpptools ; 
-  curl -LO https://github.com/microsoft/vscode-cpptools/releases/download/$WANT/cpptools-linux.vsix && \
-      code-server --install-extension cpptools-linux.vsix ) &
+  curl -LO https://github.com/microsoft/vscode-cpptools/releases/download/v${WANT}/cpptools-linux-x64.vsix && \
+      code-server --install-extension cpptools-linux-x64.vsix ) &
 exit 0
 

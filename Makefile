@@ -4,13 +4,14 @@
 ##
 DEV_LABEL=
 ifndef DOCKER_REPO
-DOCKER_REPO=csr.csel.io/jhub
+DOCKER_REPO=registry.cs.colorado.edu/jhub
 endif
 
-export NOTEBOOK_BASE = "jupyter/datascience-notebook:notebook-6.5.2"
+#export NOTEBOOK_BASE = "quay.io/jupyter/datascience-notebook:notebook-7.3.1"  # Ubuntu 24.04
+export NOTEBOOK_BASE = "quay.io/jupyter/datascience-notebook:notebook-7.2.1" # Ubuntu 22..04
 
 export NOTEBOOK_IMAGE = $(DOCKER_REPO)/notebook$(DEV_LABEL)
-export BASE_VERSION_NUMBER=v6.5.2.2
+export BASE_VERSION_NUMBER=v7.2.1
 export NOTEBOOK_VERSION = $(NOTEBOOK_IMAGE):$(BASE_VERSION_NUMBER)
 export NOTEBOOK_LATEST = $(NOTEBOOK_IMAGE):latest
 
@@ -116,7 +117,7 @@ build: build-notebook build-pl build-db build-mpi build-ai build-chaos build-dc 
 DOCKER_ARGS=--build-arg DEV_LABEL=$(DEV_LABEL)
 
 build-notebook:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_BASE)" \
+	docker build --build-arg BASE_CONTAINER=$(NOTEBOOK_BASE) --progress=plain \
 		-t $(NOTEBOOK_VERSION) -t $(NOTEBOOK_LATEST) -f Dockerfile .
 	docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_VERSION)
 	docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_LATEST)
