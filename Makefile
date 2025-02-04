@@ -18,7 +18,7 @@ export NOTEBOOK_LATEST = $(NOTEBOOK_IMAGE):latest
 #
 # The base version from which most other images are built
 #
-export NOTEBOOK_COMMON_BASE=v6.5.2.2
+export NOTEBOOK_COMMON_BASE=v7.2.1
 export NOTEBOOK_COMMON_BASE_AI=v6.5.2.2
 #export NOTEBOOK_COMMON_BASE_PL=v6.5.2.3
 

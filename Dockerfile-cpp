@@ -3,11 +3,11 @@ FROM $BASE_CONTAINER
 LABEL MAINTAINER="Jinyoung Park<jinyoung.park@colorado.edu>"
 
 USER root
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Remove jupyter kernel
 RUN     echo "y" | /opt/conda/bin/jupyter-kernelspec remove -y \
-        ir julia-1.8 # xcpp17 
+        ir julia-1.10 # xcpp17 
 
 # Install cpp-kernel
 RUN pip install jupyter-cpp-kernel 
