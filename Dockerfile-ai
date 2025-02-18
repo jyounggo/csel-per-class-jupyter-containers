@@ -1,37 +1,37 @@
 ARG BASE_CONTAINER=define_as_build_arg
 FROM ${BASE_CONTAINER}
-LABEL MAINTAINER="CSEL Ops <admin@cs.colorado.edu>"
+LABEL MAINTAINER="CSEL Ops <cs-ops@colorado.edu>"
 
 USER root
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 #
 # Add material for AI classes
 #
 
-RUN	$CONDA_DIR/bin/mamba install --quiet --yes scikit-learn bqplot 
-
 ##
 ## Installation crafted by looking at their installScripts/JupyterhubInstall.sh
 ##
-RUN	cd /opt && \
- 	git clone --branch Update_to_lab_v3 https://github.com/AISpace2/AISpace2.git && \
- 	cd AISpace2 && export NODE_OPTIONS=--openssl-legacy-provider && \
- 	(cd js ; npm install) && \
- 	pip install -r requirements-dev.txt && \
- 	pip install -e . && \	
-	jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
- 	cd js && \
- 	npm run update-lab-extension && \
- 	jupyter labextension install
+#RUN	cd /opt && \
+# 	git clone --branch Update_to_lab_v3 https://github.com/AISpace2/AISpace2.git && \
+# 	cd AISpace2 && export NODE_OPTIONS=--openssl-legacy-provider && \
+# 	(cd js ; npm install) && \
+# 	pip install -r requirements-dev.txt && \
+# 	pip install -e . && \	
+#	jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
+# 	cd js && \
+# 	npm run update-lab-extension && \
+# 	jupyter labextension install
 	
 
 RUN	$CONDA_DIR/bin/pip install ipythonblocks  opencv-python Image 
 
-RUN	$CONDA_DIR/bin/mamba install tensorflow keras qpsolvers quadprog 
-
-
+RUN	$CONDA_DIR/bin/mamba install --yes tensorflow keras qpsolvers quadprog scikit-learn bqplot \
+              && mamba clean --all -f -y && \
+   	      fix-permissions "${CONDA_DIR}" && \
+              fix-permissions "/home/${NB_USER}"
+	
 WORKDIR	$HOME
 
 RUN     rm -rf /home/jovyan  && \
