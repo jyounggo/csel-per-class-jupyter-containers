@@ -2,7 +2,7 @@ ARG BASE_CONTAINER=define_as_build_arg
 #
 # From https://github.com/almond-sh/almond
 #
-FROM $BASE_CONTAINER as coursier_base
+FROM $BASE_CONTAINER
 LABEL MAINTAINER="CSEL Ops <admin@cs.colorado.edu>"
 
 ARG   LOCAL_IVY=no
@@ -59,7 +59,7 @@ RUN 	./pl-install-kernels.sh && \
 
 # Install deno
 ENV DENO_INSTALL=/usr
-RUN curl -fsSL https://deno.land/install.sh | sh &&  \
+RUN curl -fsSL https://deno.land/install.sh | sh -s v1.46.3 &&  \
 	deno jupyter --install
 
 # FIX: Move the kernel specification files of deno to /opt/conda

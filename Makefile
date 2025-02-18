@@ -19,7 +19,7 @@ export NOTEBOOK_LATEST = $(NOTEBOOK_IMAGE):latest
 # The base version from which most other images are built
 #
 export NOTEBOOK_COMMON_BASE=v7.2.1
-export NOTEBOOK_COMMON_BASE_AI=v6.5.2.2
+#export NOTEBOOK_COMMON_BASE_AI=v6.5.2.2
 #export NOTEBOOK_COMMON_BASE_PL=v6.5.2.3
 
 export WEBOTS_VERSION_NUMBER=v6.5.2.2
@@ -29,15 +29,16 @@ export DSA_VERSION_NUMBER=v7.2.1
 export DC_VERSION_NUMBER=v6.5.2.2.1
 export CC_VERSION_NUMBER=v6.5.2.2.1
 export QT_VERSION_NUMBER=v6.5.2.2.2
-export DB_VERSION_NUMBER=v6.5.2.2.1
+export DB_VERSION_NUMBER=v7.2.1
 export INFOSYS_VERSION_NUMBER=v6.5.2.2
-export PL_VERSION_NUMBER=v6.5.2.2.2
+export PL_VERSION_NUMBER=v7.2.1
 
 export NOTEBOOK_PL_IMAGE = $(DOCKER_REPO)/notebook-pl$(DEV_LABEL)
 export NOTEBOOK_PL_VERSION = $(NOTEBOOK_PL_IMAGE):$(PL_VERSION_NUMBER)
 export NOTEBOOK_PL_LATEST = $(NOTEBOOK_PL_IMAGE):latest
 
-export ALMOND_VERSION=0.9.0
+#export ALMOND_VERSION=0.9.0
+export ALMOND_VERSION=0.13.11
 export SCALA_VERSIONS="2.13.1"
 
 export NOTEBOOK_DB_IMAGE = $(DOCKER_REPO)/notebook-db$(DEV_LABEL)
@@ -123,7 +124,7 @@ build-notebook:
 	docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_LATEST)
 
 build-pl:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		--build-arg ALMOND_VERSION=$(ALMOND_VERSION) \
 		--build-arg SCALA_VERSIONS=$(SCALA_VERSIONS) \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_PL_VERSION) -t $(NOTEBOOK_PL_LATEST) -f Dockerfile-pl .
@@ -131,109 +132,109 @@ build-pl:
 	docker tag $(NOTEBOOK_PL_IMAGE) $(NOTEBOOK_PL_LATEST)
 
 build-db:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_DB_VERSION) -t $(NOTEBOOK_DB_LATEST) -f Dockerfile-db .
 	docker tag $(NOTEBOOK_DB_IMAGE) $(NOTEBOOK_DB_VERSION)
 	docker tag $(NOTEBOOK_DB_IMAGE) $(NOTEBOOK_DB_LATEST)
 
 build-mpi:
-	docker  build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker  build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_MPI_VERSION) -t $(NOTEBOOK_MPI_LATEST) -f Dockerfile-mpi .
 	docker tag $(NOTEBOOK_MPI_IMAGE) $(NOTEBOOK_MPI_VERSION)
 	docker tag $(NOTEBOOK_MPI_IMAGE) $(NOTEBOOK_MPI_LATEST)
 
 build-ai:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE_AI)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		-t $(NOTEBOOK_AI_VERSION) -t $(NOTEBOOK_AI_LATEST) -f Dockerfile-ai .
 	docker tag $(NOTEBOOK_AI_IMAGE) $(NOTEBOOK_AI_VERSION)
 	docker tag $(NOTEBOOK_AI_IMAGE) $(NOTEBOOK_AI_LATEST)
 
 build-chaos:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_CHAOS_VERSION) -t $(NOTEBOOK_CHAOS_LATEST) -f Dockerfile-chaos .
 	docker tag $(NOTEBOOK_CHAOS_IMAGE) $(NOTEBOOK_CHAOS_VERSION)
 	docker tag $(NOTEBOOK_CHAOS_IMAGE) $(NOTEBOOK_CHAOS_LATEST)
 
 build-dc:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_DC_VERSION) -t $(NOTEBOOK_DC_LATEST) -f Dockerfile-dc .
 	docker tag $(NOTEBOOK_DC_IMAGE) $(NOTEBOOK_DC_VERSION)
 	docker tag $(NOTEBOOK_DC_IMAGE) $(NOTEBOOK_DC_LATEST)
 
 build-pac:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_PAC_VERSION) -t $(NOTEBOOK_PAC_LATEST) -f Dockerfile-pac .
 	docker tag $(NOTEBOOK_PAC_IMAGE) $(NOTEBOOK_PAC_VERSION)
 	docker tag $(NOTEBOOK_PAC_IMAGE) $(NOTEBOOK_PAC_LATEST)
 
 build-qt:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_QT_VERSION) -t $(NOTEBOOK_QT_LATEST) -f Dockerfile-qt .
 	docker tag $(NOTEBOOK_QT_IMAGE) $(NOTEBOOK_QT_VERSION)
 	docker tag $(NOTEBOOK_QT_IMAGE) $(NOTEBOOK_QT_LATEST)
 
 build-qcs:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_QCS_VERSION) -t $(NOTEBOOK_QCS_LATEST) -f Dockerfile-qt .
 	docker tag $(NOTEBOOK_QCS_IMAGE) $(NOTEBOOK_QCS_VERSION)
 	docker tag $(NOTEBOOK_QCS_IMAGE) $(NOTEBOOK_QCS_LATEST)
 
 build-introc:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_INTROC_VERSION) -t $(NOTEBOOK_INTROC_LATEST) -f Dockerfile-introc .
 	docker tag $(NOTEBOOK_INTROC_IMAGE) $(NOTEBOOK_INTROC_VERSION)
 	docker tag $(NOTEBOOK_INTROC_IMAGE) $(NOTEBOOK_INTROC_LATEST)
 
 build-corg:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_CORG_VERSION) -t $(NOTEBOOK_CORG_LATEST) -f Dockerfile-corg .
 	docker tag $(NOTEBOOK_CORG_IMAGE) $(NOTEBOOK_CORG_VERSION)
 	docker tag $(NOTEBOOK_CORG_IMAGE) $(NOTEBOOK_CORG_LATEST)
 
 build-ns:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_NS_VERSION) -t $(NOTEBOOK_NS_LATEST) -f Dockerfile-ns .
 	docker tag $(NOTEBOOK_NS_IMAGE) $(NOTEBOOK_NS_VERSION)
 	docker tag $(NOTEBOOK_NS_IMAGE) $(NOTEBOOK_NS_LATEST)
 
 build-cc:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_CC_VERSION) -t $(NOTEBOOK_CC_LATEST) -f Dockerfile-cc .
 	docker tag $(NOTEBOOK_CC_IMAGE) $(NOTEBOOK_CC_VERSION)
 	docker tag $(NOTEBOOK_CC_IMAGE) $(NOTEBOOK_CC_LATEST)
 
 build-webots:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
 		$(DOCKER_ARGS) -t $(NOTEBOOK_WEBOTS_VERSION) -t $(NOTEBOOK_WEBOTS_LATEST) -f Dockerfile-webots .
 	docker tag $(NOTEBOOK_WEBOTS_IMAGE) $(NOTEBOOK_WEBOTS_VERSION)
 	docker tag $(NOTEBOOK_WEBOTS_IMAGE) $(NOTEBOOK_WEBOTS_LATEST)
 
 build-appliedml:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
         	$(DOCKER_ARGS) -t $(NOTEBOOK_APPLIEDML_VERSION) -t $(NOTEBOOK_APPLIEDML_LATEST) -f Dockerfile-appliedml .
 	docker tag $(NOTEBOOK_APPLIEDML_IMAGE) $(NOTEBOOK_APPLIEDML_VERSION)
 	docker tag $(NOTEBOOK_APPLIEDML_IMAGE) $(NOTEBOOK_APPLIEDML_LATEST)
 
 build-dsa:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
         	$(DOCKER_ARGS) -t $(NOTEBOOK_DSA_VERSION) -t $(NOTEBOOK_DSA_LATEST) -f Dockerfile-dsa .
 	docker tag $(NOTEBOOK_DSA_IMAGE) $(NOTEBOOK_DSA_VERSION)
 	docker tag $(NOTEBOOK_DSA_IMAGE) $(NOTEBOOK_DSA_LATEST)
 
 build-swd:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
         	$(DOCKER_ARGS) -t $(NOTEBOOK_SWD_VERSION) -t $(NOTEBOOK_SWD_LATEST) -f Dockerfile-swd .
 	docker tag $(NOTEBOOK_SWD_IMAGE) $(NOTEBOOK_SWD_VERSION)
 	docker tag $(NOTEBOOK_SWD_IMAGE) $(NOTEBOOK_SWD_LATEST)
 
 build-infosys:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
         	$(DOCKER_ARGS) -t $(NOTEBOOK_INFOSYS_VERSION) -t $(NOTEBOOK_INFOSYS_LATEST) -f Dockerfile-infosys .
 	docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_VERSION)
 	docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_LATEST)
 
 build-cpp:
-	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" \
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
         	$(DOCKER_ARGS) -t $(NOTEBOOK_CPP_VERSION) -t $(NOTEBOOK_CPP_LATEST) -f Dockerfile-cpp .
 	docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_VERSION)
 	docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_LATEST)
