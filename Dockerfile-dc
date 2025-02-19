@@ -117,8 +117,9 @@ RUN mamba install --quiet --yes 'spylon-kernel=0.4*' && \
 ENV APACHE_HADOOP_VERSION=3.3.4
 ARG hadoop_checksum="ca5e12625679ca95b8fd7bb7babc2a8dcb2605979b901df9ad137178718821097b67555115fafc6dbf6bb32b61864ccb6786dbc555e589694a22bf69147780b4"
 
-RUN wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/hadoop/core/hadoop-${APACHE_HADOOP_VERSION}/hadoop-${APACHE_HADOOP_VERSION}.tar.gz\?as_json | \
-    python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])")
+#RUN wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/hadoop/core/hadoop-${APACHE_HADOOP_VERSION}/hadoop-${APACHE_HADOOP_VERSION}.tar.gz\?as_json | \
+#    python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])")
+RUN wget -q https://archive.apache.org/dist/hadoop/common/hadoop-${APACHE_HADOOP_VERSION}/hadoop-${APACHE_HADOOP_VERSION}.tar.gz
 
 RUN echo "${hadoop_checksum} *hadoop-${APACHE_HADOOP_VERSION}.tar.gz" | sha512sum -c - && \
     tar xzf "hadoop-${APACHE_HADOOP_VERSION}.tar.gz" -C /usr/local --owner $NB_UID --group $NB_GID --no-same-owner && \

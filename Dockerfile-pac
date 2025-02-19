@@ -4,7 +4,7 @@ LABEL MAINTAINER="CSEL Ops <admin@cs.colorado.edu>"
 
 USER root
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 #
 # Install Python SAT and LP solvers for Practical Algorithmic Complexity 
