@@ -1,9 +1,9 @@
 ARG BASE_CONTAINER=define_as_build_arg
 FROM $BASE_CONTAINER
-LABEL MAINTAINER="CSEL Ops <admin@cs.colorado.edu>"
+LABEL MAINTAINER="CSEL Ops <cs-ops@colorado.edu>"
 
 USER root
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # GREQ0380353 Install shared packages ECEN 1310 / ECEN 4313
 RUN apt-get update \
@@ -13,7 +13,7 @@ RUN apt-get update \
 
 # Remove jupyter kernel
 RUN     echo "y" | /opt/conda/bin/jupyter-kernelspec remove -y \
-        ir julia-1.8 # xcpp17 
+        ir julia-1.10 # xcpp17 
 
 # Remove drawio
 RUN pip uninstall -y jupyterlab-drawio
