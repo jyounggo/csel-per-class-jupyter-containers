@@ -36,7 +36,8 @@ RUN curl -Lo /usr/local/bin/coursier https://github.com/coursier/coursier/releas
     chmod +x /usr/local/bin/coursier
 
 # Install a metal plugin(vscode)
-ADD metals-vscode /opt/install/metals-vscode
+#ADD metals-vscode /opt/install/metals-vscode
+ADD https://github.com/scalameta/metals-vscode/releases/download/v1.19.0/scalameta.metals-1.19.0.vsix /opt/install/metals-vscode
 
 USER $NB_UID
 

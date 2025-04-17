@@ -113,7 +113,11 @@ export NOTEBOOK_CPP_IMAGE = $(DOCKER_REPO)/notebook-cpp$(DEV_LABEL)
 export NOTEBOOK_CPP_VERSION = $(NOTEBOOK_CPP_IMAGE):$(BASE_VERSION_NUMBER)
 export NOTEBOOK_CPP_LATEST = $(NOTEBOOK_CPP_IMAGE):latest
 
-build: build-notebook build-pl build-db build-mpi build-ai build-chaos build-dc build-pac build-qt build-qcs build-introc build-corg build-ns build-cc build-appliedml build-dsa build-swd build-infosys build-cpp
+export NOTEBOOK_RECOVERY_IMAGE = $(DOCKER_REPO)/notebook-recovery$(DEV_LABEL)
+export NOTEBOOK_RECOVERY_VERSION = $(NOTEBOOK_RECOVERY_IMAGE):$(BASE_VERSION_NUMBER)
+export NOTEBOOK_RECOVERY_LATEST = $(NOTEBOOK_RECOVERY_IMAGE):latest
+
+build: build-notebook build-pl build-db build-mpi build-ai build-chaos build-dc build-pac build-qt build-qcs build-introc build-corg build-ns build-cc build-appliedml build-dsa build-swd build-infosys build-cpp build-recovery
 
 DOCKER_ARGS=--build-arg DEV_LABEL=$(DEV_LABEL)
 
@@ -239,6 +243,12 @@ build-cpp:
 	docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_VERSION)
 	docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_LATEST)
 
+build-recovery:
+	docker build --build-arg BASE_CONTAINER="$(NOTEBOOK_IMAGE):$(NOTEBOOK_COMMON_BASE)" --progress=plain \
+        	$(DOCKER_ARGS) -t $(NOTEBOOK_RECOVERY_VERSION) -t $(NOTEBOOK_RECOVERY_LATEST) -f Dockerfile-recovery .
+	docker tag $(NOTEBOOK_RECOVERY_IMAGE) $(NOTEBOOK_RECOVERY_VERSION)
+	docker tag $(NOTEBOOK_RECOVERY_IMAGE) $(NOTEBOOK_RECOVERY_LATEST)
+
 tag:
 	-docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_VERSION)
 	-docker tag $(NOTEBOOK_IMAGE) $(NOTEBOOK_LATEST)
@@ -280,8 +290,10 @@ tag:
 	-docker tag $(NOTEBOOK_INFOSYS_IMAGE) $(NOTEBOOK_INFOSYS_LATEST)
 	-docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_VERSION)
 	-docker tag $(NOTEBOOK_CPP_IMAGE) $(NOTEBOOK_CPP_LATEST)
+	-docker tag $(NOTEBOOK_RECOVERY_IMAGE) $(NOTEBOOK_RECOVERY_VERSION)
+	-docker tag $(NOTEBOOK_RECOVERY_IMAGE) $(NOTEBOOK_RECOVERY_LATEST)
 
-push: push-notebook push-pl push-db push-mpi push-ai push-chaos push-dc push-pac push-qt push-qcs push-introc push-corg push-ns push-cc push-webots push-appliedml push-dsa push-swd push-infosys push-cpp
+push: push-notebook push-pl push-db push-mpi push-ai push-chaos push-dc push-pac push-qt push-qcs push-introc push-corg push-ns push-cc push-webots push-appliedml push-dsa push-swd push-infosys push-cpp push-recovery
 
 push-notebook: build-notebook
 	-docker push $(NOTEBOOK_VERSION)
@@ -362,3 +374,7 @@ push-infosys: build-infosys
 push-cpp: build-cpp
 	-docker push $(NOTEBOOK_CPP_VERSION)
 	-docker push $(NOTEBOOK_CPP_LATEST)
+
+push-recovery: build-recovery
+	-docker push $(NOTEBOOK_RECOVERY_VERSION)
+	-docker push $(NOTEBOOK_RECOVERY_LATEST)

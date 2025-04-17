@@ -5,7 +5,7 @@ LABEL MAINTAINER="CSEL Ops <admin@cs.colorado.edu>"
 
 USER    root
 
-ENV     DEBIAN_FRONTEND noninteractive
+ENV     DEBIAN_FRONTEND=noninteractive
 
 # JDK, maven, ant
 RUN  apt-get update && apt-get install --no-install-recommends -y openjdk-17-jdk-headless maven ant ca-certificates-java  && \

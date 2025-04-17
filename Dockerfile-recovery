@@ -3,10 +3,10 @@ FROM $BASE_CONTAINER
 LABEL MAINTAINER="CSEL Ops <admin@cs.colorado.edu>"
 
 USER root
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Remove jupyter kernel
-RUN     echo "y" | /opt/conda/bin/jupyter-kernelspec remove -y python3 ir julia-1.8
+RUN     echo "y" | /opt/conda/bin/jupyter-kernelspec remove -y python3 ir julia-1.10
 
 # Remove 
 RUN pip uninstall -y jupyterlab-drawio jupyter-codeserver-proxy  jupyterlab-latex
